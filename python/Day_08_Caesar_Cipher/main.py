@@ -2,28 +2,20 @@ import cipher
 
 print(cipher.cipher_art)
 
-encryption_type=["decrypt","encrypt"]
-
 while True:
 
-    type=input("Do you want to encrypt or decrypt.\nPress 1 to encrypt and 0 to decrypt, and any other character to exit: ")
-
-    if type not in "01":
+    encryption_type = (input("\nDo you want to encode or decode.\nPress any other character to exit.\n")).lower()
+    if encryption_type not in ["encode", "decode"]:
         break
 
+    message = (input(f"\nPlease enter the message you want to {encryption_type}, without any spaces:\n")).lower()
 
-    message=(input(f"Please enter the message you want to {encryption_type[int(type)]}, without any spaces: ")).lower()
+    key = input("\nPlease enter the key:\n")
 
-    if not message.isalpha():
+    while not key.isdigit():
         print("Incorrect Input!!!\n Please Try Again!!!")
         continue
 
-    key=input("Please enter the key: ")
+    final_message=cipher.decode_encode(message,int(key),encryption_type)
 
-    if not key.isdigit():
-        print("Incorrect Input!!!\n Please Try Again!!!")
-        continue
-
-    final_message=cipher.decode_encode(message,int(key),int(type))
-
-    print(f"Your {encryption_type[int(type)]}ed is {final_message}.")
+    print(f"\nYour {encryption_type}d message is {final_message}.")

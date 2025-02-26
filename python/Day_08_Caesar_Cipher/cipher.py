@@ -5,11 +5,15 @@ password=string.ascii_lowercase
 def decode_encode(message,key,type):
 
     final_message=""
-    key = key if type else key*(-1)
+
+    key = key if type=="encode" else key*(-1)
+
     for char in message:
         index=password.find(char)
-        final_message+=password[(index+key)%26]
-
+        if char.isalpha():
+            final_message += password[(index+key)%26]
+        else:
+            final_message += char
     return final_message
 
 cipher_art="""
