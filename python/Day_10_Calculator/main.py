@@ -14,7 +14,11 @@ while next_step:
 
     elif continuation == "n":
 
-        num1 = float(input("\nWhat's the first number?: "))
+        try:
+            num1 = float(input("\nWhat's the first number?: "))
+        except ValueError:
+            print("Invalid Input!!!\n\nTry Again!!!")
+            continue
 
     else:
         break
@@ -24,10 +28,14 @@ while next_step:
     if operator not in "+-*/":
         print("\nInvalid Operator!!!\n\nTry Again!!")
         continue
-
-    num2 = float(input("\nWhat's the next number?: "))
+    try:
+        num2 = float(input("\nWhat's the next number?: "))
+    except ValueError:
+        print("Invalid Input!!!\n\nTry Again!!!")
+        continue
 
     calculation=cal(num1, num2, operator)
+
     result = calculation.operator_selector()
 
     print(f"\n{num1} {operator} {num2} = {result}")
