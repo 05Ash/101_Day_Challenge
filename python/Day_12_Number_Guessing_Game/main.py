@@ -31,14 +31,15 @@ while status:
     print(f"You have {lives} attempts remaining to guess the number.")
     user_guess = int(input("Make a guess: "))
     actual_guess = number_picker()
-    while lives > 0:
+    while lives > 1:
         guess_result = num_compare(user_guess, actual_guess)
         if guess_result == 0:
             break
         lives -= 1
         print("Guess again.")
+        print(f"You have {lives} attempts remaining to guess the number.")
         user_guess = int(input("Make a guess: "))
-    if lives == 0 and guess_result != 0:
+    if lives == 1 and guess_result != 0:
         print("You lose.")
 
     status = bool(input("Do you want to play again? Press 'y' for yes: ") == "y")
