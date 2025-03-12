@@ -46,12 +46,24 @@ def print_cards(cards):
             print(card[index], end="\t")
         print("\n", end="")
 
-# 4.2> Function to append card
+
+# 4.3> Compare function
+
+def compare_score(userS, dealerS):
+    if computer_score == player_score:
+        return "Draw"
+
+    elif computer_score == 21 or computer_score > player_score:
+        return "Computer"
+
+    elif computer_score > 21 or computer_score < player_score:
+        return "Player"
 
 #5> Game intialization in while
 
 while game_start == "y":
-    deck=["K","Q","J","10","9","8","7","6","5","4","3","2","A",
+    deck=[
+      "K","Q","J","10","9","8","7","6","5","4","3","2","A",
       "K","Q","J","10","9","8","7","6","5","4","3","2","A",
       "K","Q","J","10","9","8","7","6","5","4","3","2","A",
       "K","Q","J","10","9","8","7","6","5","4","3","2","A",]
@@ -73,74 +85,45 @@ while game_start == "y":
     #Intro Cards Prin
     print("\t\tYour Hand: ", " ".join(player_cards), "\t Current Score: ",player_score)
     print_cards(player_cards)
-    print("\t\tComputer's First Card: ", computer_cards[0], "\t Current Score: ",computer_score)
-    print_cards(computer_cards)
+    print("\t\tComputer's First Card: ", computer_cards[0])
+    print_cards(computer_cards[:1])
 
     #Player choices
-    while not game_end:
-        if player_score == 21:
-            game_end = True
-            winner = "Player"
-            break
+    while not game_end and player_score < 21:
 
         player_choice =  (input("Do you want to draw another card? Press 'y' for yes and 'n' for no: ")).lower()
-
         if player_choice == "y":
-
             player_cards.append(draw_card())
             player_score = card_score(player_cards, player_score)
-            if player_score < 21:
 
-                print("\t\tYour Current Hand: ", " ".join(player_cards), "\t Current Score: ",player_score)
-                print_cards(player_cards)
-                continue
-
-            if player_score > 21:
+            if player_score >= 21:
                 game_end =  True
-                winner = "Computer"
+
+            else:
+                print("\t\tYour Current Hand: ", " ".join(player_cards), "\t Current Score: ", player_score)
+                print_cards(player_cards)
 
         else:
             game_end = True
 
     # Computer choices
-    if winner == None:
-
-        game_end = False
-
-        while not game_end:
-
-            if computer_score < 17:
-                computer_cards.append(draw_card())
-                computer_score = card_score(computer_cards, computer_score)
-
-            else:
-
-                if computer_score == player_score:
-                    winner = "Draw"
-
-                elif computer_score == 21 or computer_score > player_score:
-                    winner = "Computer"
-
-                elif computer_score > 21 or computer_score < player_score:
-                    winner = "Player"
-                game_end = True
+    while computer_score < 17 and player_score != 21:
+        computer_cards.append(draw_card())
+        computer_score = card_score(computer_cards, computer_score)
 
     print("\t\tYour Final Hand: ", " ".join(player_cards), "\t Final Score: ",player_score)
     print_cards(player_cards)
-
     if player_score <21: # Print's Computer cards only if they have been drawn
         print("\t\tComputer's Final Hand: ", " ".join(computer_cards),"\t\t", "Computer's Final Score: ",computer_score)
         print_cards(computer_cards)
 
+    winner = compare_score(player_score, computer_score)
     if winner == "Draw":
         print("\t\tThe game ended in a draw.")
         game_end = True
-
     elif winner == "Player":
         print("\t\tYou win!!!")
-
     else:
         print("\t\tYou Lose!!!")
-
-
     game_start=(input("Do you want to play a game of Blackjack? Type 'y' for Yes and 'n' for No.")).lower()
+    print("\n"*20)
