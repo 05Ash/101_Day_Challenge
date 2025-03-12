@@ -2,7 +2,6 @@ import artwork
 import random
 
 #1> Intialize deck
-deck=["K","Q","J","10","9","8","7","6","5","4","3","2","A"]
 
 #2> Intro question
 
@@ -13,22 +12,29 @@ game_start=(input("Do you want to play a game of Blackjack? Type 'y' for Yes and
 def draw_card():
     """Draws a random card"""
     card = random.choice(deck)
+    deck.remove(card)
     return card
 
 #4> Function to calculate score
 
-def card_score(card, score):
+def card_score(cards, score):
     """calculate score for the single card, and adds it to the score"""
-
-    if card in "KQJ":
-        return score + 10
-    elif card == "A":
-        if (score + 1) == 21 or (score + 11) > 21:
-            return score + 1
+    score = 0
+    for card in cards:
+        if card == "A":
+            score += 11
+        elif card in "KQJ":
+            score += 10
         else:
-            return score + 11
-    else:
-        return score + int(card)
+            score += int(card)
+
+    total_A = cards.count("A")
+    # Changing A's score to 0 for all A more than 1
+    while total_A > 0 and score > 21:
+        score -= 10
+        total_A -= 1
+
+    return score
 
 # Function to print card
 def print_cards(cards):
@@ -45,15 +51,23 @@ def print_cards(cards):
 #5> Game intialization in while
 
 while game_start == "y":
+    deck=["K","Q","J","10","9","8","7","6","5","4","3","2","A",
+      "K","Q","J","10","9","8","7","6","5","4","3","2","A",
+      "K","Q","J","10","9","8","7","6","5","4","3","2","A",
+      "K","Q","J","10","9","8","7","6","5","4","3","2","A",]
+
 
     print(artwork.intro)
 
     # Default intialization
     game_end = False
-    player_cards=[draw_card(),draw_card()]
-    computer_cards=[draw_card()]
-    player_score = sum([card_score(card, 0) for card in player_cards])
-    computer_score = card_score(computer_cards[0], 0)
+    player_cards=[]
+    computer_cards=[]
+    for _ in range(2):
+        player_cards.append(draw_card())
+        computer_cards.append(draw_card())
+    player_score = card_score(player_cards, 0)
+    computer_score = card_score(computer_cards, 0)
     winner = None
 
     #Intro Cards Prin
@@ -73,10 +87,8 @@ while game_start == "y":
 
         if player_choice == "y":
 
-            new_card = draw_card()
-            player_cards.append(new_card)
-            player_score = card_score(new_card, player_score)
-            print(player_score)
+            player_cards.append(draw_card())
+            player_score = card_score(player_cards, player_score)
             if player_score < 21:
 
                 print("\t\tYour Current Hand: ", " ".join(player_cards), "\t Current Score: ",player_score)
@@ -98,9 +110,8 @@ while game_start == "y":
         while not game_end:
 
             if computer_score < 17:
-                new_card = draw_card()
-                computer_cards.append(new_card)
-                computer_score = card_score(new_card, computer_score)
+                computer_cards.append(draw_card())
+                computer_score = card_score(computer_cards, computer_score)
 
             else:
 
