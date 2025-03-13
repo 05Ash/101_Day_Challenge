@@ -39,8 +39,9 @@ while status:
         print("Guess again.")
         print(f"You have {lives} attempts remaining to guess the number.")
         user_guess = int(input("Make a guess: "))
+
     if lives == 1 and guess_result != 0:
-        print("You lose.")
+        print(f"You lose. The number was {actual_guess}")
 
     status = bool(input("Do you want to play again? Press 'y' for yes: ") == "y")
     print("\n"*20)
