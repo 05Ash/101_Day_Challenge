@@ -6,20 +6,15 @@ myCoffeeMachine = MoneyMachine()
 myCoffeeMacker = CoffeeMaker()
 myMenu = Menu()
 
-for item in myMenu.menu:
-    print(item.name, item.cost, item.ingredients)
-
 machineStatus = True
 while machineStatus:
     userChoice = input(f"What would you like {myMenu.get_items()}: ").strip().lower()
     if userChoice == "off":
-        break
+        machineStatus = False
     elif userChoice == "report":
-        print(myCoffeeMacker.report())
-        print(myCoffeeMachine.report())
+        myCoffeeMacker.report()
+        myCoffeeMachine.report()
     else:
         userChoice = myMenu.find_drink(userChoice)
-        if userChoice != None:
-            if myCoffeeMacker.is_resource_sufficient(userChoice):
-                if myCoffeeMachine.make_payment(userChoice.cost):
-                    myCoffeeMacker.make_coffee(userChoice)
+        if userChoice != None and myCoffeeMacker.is_resource_sufficient(userChoice) and myCoffeeMachine.make_payment(userChoice.cost):
+            myCoffeeMacker.make_coffee(userChoice)
