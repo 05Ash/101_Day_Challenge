@@ -54,13 +54,14 @@ def draw_spirograph(total):
         my_turtle.circle(100)
         my_turtle.left(angle)
 
+color_list = [(237, 233, 221), (134, 90, 53), (200, 154, 115), (57, 30, 20), (59, 99, 118), (23, 44, 68), (129, 72, 85), (71, 107, 84), (69, 27, 36), (227, 238, 230), (121, 31, 41), (130, 33, 24), (174, 145, 50), (22, 51, 36), (186, 100, 85), (140, 168, 153), (79, 83, 25), (226, 202, 126), (132, 157, 166), (21, 90, 57), (181, 140, 149), (231, 172, 161), (166, 102, 114), (220, 231, 236), (8, 89, 108), (38, 60, 97), (239, 222, 226), (93, 148, 130), (90, 145, 152), (224, 171, 181), (171, 203, 189), (119, 126, 140), (164, 204, 210), (184, 190, 202)]
+
 def draw_hirst_copy(steps):
-    colors = colorgram.extract("/home/ash/projects/101_Day_Challenge/python/Day_18_Turtle_Art/hirst_painting.jpg", 50)
     my_turtle.shape("square")
     for i in range(steps):
         my_turtle.goto([0, i*50])
         for j in range(steps):
-            color = random.choice(colors).rgb
+            color = random.choice(color_list)
             my_turtle.color(color)
             my_turtle.pd()
             my_turtle.stamp()
@@ -69,5 +70,5 @@ def draw_hirst_copy(steps):
     my_turtle.got([0,0])
 
 
-draw_hirst_copy(10)
+draw_hirst_copy(20)
 t.exitonclick()
