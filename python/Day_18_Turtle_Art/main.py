@@ -67,7 +67,7 @@ def draw_hirst_copy(steps):
             my_turtle.stamp()
             my_turtle.pu()
             my_turtle.fd(50)
-    my_turtle.got([0,0])
+    my_turtle.goto([0,0])
 
 
 draw_hirst_copy(20)
