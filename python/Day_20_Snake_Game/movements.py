@@ -1,4 +1,3 @@
-import time
 def move_forward(snakehead):
     """Dictates the movement of snakehead, which is the first element of the snake
         It makes it move forward by 20 pixels"""

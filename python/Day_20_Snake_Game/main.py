@@ -2,7 +2,7 @@ from turtle import Screen
 from snake_design import SnakeBody, Food
 import movements as m
 import time
-from game_engine import brain
+from game_engine import brain, statusCheck, write_score
 
 game_screen = Screen()
 game_screen.bgcolor("black")
@@ -17,18 +17,19 @@ game_screen.listen()
 snake = SnakeBody()
 game_screen.update()
 snakebody = snake.body
+pen = snake.writing_head
 
 #TODO: Move the Snake (Done)
 
 game_status = True
-commands = [m.move_forward]
 counter = -2
+score = 0
 while game_status:
-    coordinate = snakebody[0].pos()
-    for command in commands:
-        command(snakebody[0])
-    m.snakebody_movements(snakebody[1:], coordinate)
-    commands = [m.move_forward]
+    head = snakebody[0]
+    body = snakebody[1:]
+    coordinate = head.pos()
+    m.move_forward(head)
+    m.snakebody_movements(body, coordinate)
 
 #TODO: Control the Snake
 
@@ -38,14 +39,12 @@ while game_status:
         global key_pressed
         if not key_pressed:
             key_pressed = True
-            brain(snakebody[0], key_name)
+            brain(head, key_name)
             game_screen.ontimer(reset_key_flag, 200)
-
 
     def reset_key_flag():
         global key_pressed
         key_pressed = False
-
 
     def move_up():
         on_key_pressed("w")
@@ -69,25 +68,44 @@ while game_status:
     game_screen.onkey(move_right, "d")
     game_screen.onkey(move_right, "Right")
 
-    head_pos = snakebody[0].pos()
-    max_xy = (game_screen.window_width()/2 - 10, game_screen.window_height() / 2 - 10)
-    min_xy = (-1 * max_xy[0], -1 * max_xy[1])
 #TODO: Detect collision with the food
+    screen_width = game_screen.window_width()
+    screen_height = game_screen.window_height()
+    max_xy = (screen_width/2 - 10, screen_height / 2 - 10)
+    min_xy = (-1 * max_xy[0], -1 * max_xy[1])
+
+    if counter == -2:
+        food = Food(game_screen, max_xy, min_xy, snakebody)
+        counter = 90
+
+    head_pos = head.pos()
+    food_pos = food.coordinate
+    food_eaten = ( food_pos[0]-10 <= head_pos[0] <= food_pos[0]+10 and food_pos[1]-10 <= head_pos[1] <= food_pos[1]+10)
+
     if counter == 0:
-        food.relocate()
+        food.relocate(snakebody)
         counter = 90
-    elif counter == -2:
-        food = Food(game_screen, max_xy, min_xy)
+
+    elif food_eaten:
+        score += 1
+        snake.add_segment()
+        food.relocate(snakebody)
         counter = 90
-        print(counter, food.max_xy, food.min_xy)
+
     else:
         food.visiblity(counter)
         counter -= 1
 
 #TODO: Create a scoreboard
+    game_screen.title(f"Score: {score}")
+
 #TODO: Detect collision with the wall
 #TODO: Detect collision with the tail
+    game_status = statusCheck(head, body, max_xy, min_xy)
+    write_score(pen, score, max_xy[1], game_status)
+
 #TODO: Update Screen
     game_screen.update()
     time.sleep(.1)
+
 game_screen.exitonclick()
