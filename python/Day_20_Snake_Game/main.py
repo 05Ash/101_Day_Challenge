@@ -1,92 +1,86 @@
-from turtle import Screen
-from snake_design import SnakeBody, Food
-import movements as m
+from snake import Snake
+from food import Food
+from screen import GameScreen
 import time
-from game_engine import brain, statusCheck, write_score
-
-game_screen = Screen()
-game_screen.bgcolor("black")
-game_screen.setup(800,600)
-game_screen.title("Snake")
-game_screen.tracer(0)
-game_screen.listen()
-
+from game_engine import statusCheck
 
 #TODO: Create a snake body (Done)
 
-snake = SnakeBody()
-game_screen.update()
+snake = Snake()
+screen = GameScreen(snake)
 snakebody = snake.body
-pen = snake.writing_head
+pen = screen.pen
+max_x = screen.max_x
+max_y = screen.max_y
+min_x = screen.min_x
+min_y = screen.min_y
+food = Food(screen, snakebody)
 
 #TODO: Move the Snake (Done)
 
 game_status = True
-counter = -2
+counter = 90
 score = 0
 while game_status:
-    head = snakebody[0]
+    head = snake.head
     body = snakebody[1:]
     coordinate = head.pos()
-    m.move_forward(head)
-    m.snakebody_movements(body, coordinate)
-
+    snake.body_movement()
+    snake.head_movement()
 #TODO: Control the Snake
-
-    #decides the next command to add to commands
     key_pressed = False
-    def on_key_pressed(key_name):
-        global key_pressed
-        if not key_pressed:
-            key_pressed = True
-            brain(head, key_name)
-            game_screen.ontimer(reset_key_flag, 200)
+
+    def up():
+        on_key_pressed("w")
+
+    def down():
+        on_key_pressed("s")
+
+    def left():
+        on_key_pressed("a")
+
+    def right():
+        on_key_pressed("d")
 
     def reset_key_flag():
         global key_pressed
         key_pressed = False
 
-    def move_up():
-        on_key_pressed("w")
+    def on_key_pressed(key_name):
+        global key_pressed
+        if not key_pressed:
+            key_pressed = True
+            controller(key_name)
+            screen.ontimer(reset_key_flag, 200)
+    def controller(key):
+        if key == "w":
+            snake.move_up()
+        elif key == "s":
+            snake.move_down()
+        elif key == "a":
+            snake.move_left()
+        else:
+            snake.move_right()
 
-    def move_down():
-        on_key_pressed("s")
+    screen.onkey(down, "s")
+    screen.onkey(up, "Up")
+    screen.onkey(down, "Down")
+    screen.onkey(left, "a")
+    screen.onkey(left, "Left")
+    screen.onkey(up, "w")
+    screen.onkey(right, "d")
+    screen.onkey(right, "Right")
 
-    def move_left():
-        on_key_pressed("a")
 
-    def move_right():
-        on_key_pressed("d")
-
-    # executes the commands depending on the keys press
-    game_screen.onkey(move_up, "w")
-    game_screen.onkey(move_up, "Up")
-    game_screen.onkey(move_down, "s")
-    game_screen.onkey(move_down, "Down")
-    game_screen.onkey(move_left, "a")
-    game_screen.onkey(move_left, "Left")
-    game_screen.onkey(move_right, "d")
-    game_screen.onkey(move_right, "Right")
-
-#TODO: Detect collision with the food
-    screen_width = game_screen.window_width()
-    screen_height = game_screen.window_height()
-    max_xy = (screen_width/2 - 10, screen_height / 2 - 10)
-    min_xy = (-1 * max_xy[0], -1 * max_xy[1])
-
-    if counter == -2:
-        food = Food(game_screen, max_xy, min_xy, snakebody)
-        counter = 90
+# #TODO: Detect collision with the food
 
     head_pos = head.pos()
-    food_pos = food.coordinate
-    food_eaten = ( food_pos[0]-10 <= head_pos[0] <= food_pos[0]+10 and food_pos[1]-10 <= head_pos[1] <= food_pos[1]+10)
 
     if counter == 0:
         food.relocate(snakebody)
         counter = 90
 
-    elif food_eaten:
+    if food.isFoodEaten(head):
         score += 1
         snake.add_segment()
         food.relocate(snakebody)
@@ -96,16 +90,17 @@ while game_status:
         food.visiblity(counter)
         counter -= 1
 
-#TODO: Create a scoreboard
-    game_screen.title(f"Score: {score}")
+# #TODO: Create a scoreboard
 
-#TODO: Detect collision with the wall
-#TODO: Detect collision with the tail
-    game_status = statusCheck(head, body, max_xy, min_xy)
-    write_score(pen, score, max_xy[1], game_status)
+# #TODO: Detect collision with the wall
+# #TODO: Detect collision with the tail
+    game_status = statusCheck(head_pos, snakebody, screen)
+#     #write_score(pen, score, max_xy[1], game_status)
+    screen.write_score(score, game_status)
 
-#TODO: Update Screen
-    game_screen.update()
+# #TODO: Update Screen
+#     game_screen.update()
+    screen.screen_update()
     time.sleep(.1)
 
-game_screen.exitonclick()
+screen.exit_on_click()
