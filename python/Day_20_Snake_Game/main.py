@@ -91,6 +91,7 @@ while game_status:
     gamescreen.onkey(up, "w")
     gamescreen.onkey(right, "d")
     gamescreen.onkey(right, "Right")
+    gamescreen.onkey(gamescreen.bye, "Escape")
 
 
     # Detect collision with the food
@@ -113,7 +114,11 @@ while game_status:
         counter -= 1
 
     # Detect collision with the wall and tail
-    game_status = statusCheck(head_pos, snakebody, design)
+    in_game = statusCheck(head_pos, snakebody, design)
+    if not in_game:
+        snake.reset()
+        scoreboard.reset()
+
 
     # Update Screen
     gamescreen.update()

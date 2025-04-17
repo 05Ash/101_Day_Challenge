@@ -15,18 +15,13 @@ class ScoreBoard(Turtle):
     def update_score(self):
         self.pd()
         self.clear()
-        self.write(f"Score: {self.score}",
+        self.write(f"Score: {self.score} High Score: {self.high_score}",
                    move = False, align = "Center",
                    font = ("Arial", 15, "bold"))
         self.pu()
 
     def increase_score(self):
         self.score += 1
-
-    def game_over(self):
-        self.home()
-        self.write(f"GAME OVER\nHIGH SCORE: {self.high_score}", move = False, align = "center", font = ("Arial", 15, "bold"))
-        self.pu()
 
     def update_highscore(self):
         self.high_score = max(self.score, self.high_score)
@@ -36,5 +31,11 @@ class ScoreBoard(Turtle):
     def load_highscore(self):
         with open("./Day_20_Snake_Game/high_score.txt", "r") as file:
             self.high_score = int(file.read())
+
+    def reset(self):
+        self.update_highscore()
+        self.score = 0
+        self.load_highscore()
+        self.update_score()
     # def high_score_update(self):
     #     with open("high_score.txt", "w") as file:

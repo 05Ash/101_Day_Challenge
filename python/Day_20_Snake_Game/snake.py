@@ -62,3 +62,11 @@ class Snake:
             next_pos = seg.pos()
             seg.goto(initial_pos)
             initial_pos = next_pos
+
+    def reset(self):
+        for seg in self.body:
+            seg.ht()
+            del seg
+        self.body.clear()
+        self.snake()
+        self.head = self.body[0]

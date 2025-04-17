@@ -55,7 +55,7 @@ class Food(Turtle):
         head_xcor = head.xcor()
         head_ycor = head.ycor()
         is_eaten = (
-            self.xcor() - 15 <= head_xcor <= self.xcor() + 15
-            and self.ycor() - 15 <= head_ycor <= self.ycor() + 15
+            self.xcor() - 20 <= head_xcor <= self.xcor() + 20
+            and self.ycor() - 20 <= head_ycor <= self.ycor() + 20
                     )
         return is_eaten
