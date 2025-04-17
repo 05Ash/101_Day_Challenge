@@ -13,6 +13,8 @@ class Snake:
         self.body = []
         self.snake()
         self.head = self.body[0]
+        self.score = 0
+        self.high_score = 0
 
     def create_segment(self, cor):
         "Adds a segment to the snake, with cordinate given as an argument"

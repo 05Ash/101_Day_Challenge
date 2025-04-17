@@ -40,6 +40,7 @@ while i < no_of_cars:
         i += 1
     for car in cars_moved:
         car.movement()
+    counter = (counter + 1)%5
 
 level = 1 #Variable to store the level of the game
 while game_status:

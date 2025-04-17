@@ -1,33 +1,52 @@
 from snake import Snake
 from food import Food
-from screen import GameScreen
+from screen import Designer
 import time
 from game_engine import statusCheck
-
+from score import ScoreBoard
+from turtle import Screen
 #TODO: Create a snake body (Done)
 
-snake = Snake()
-screen = GameScreen(snake)
-snakebody = snake.body
-pen = screen.pen
-max_x = screen.max_x
-max_y = screen.max_y
-min_x = screen.min_x
-min_y = screen.min_y
-food = Food(screen, snakebody)
+WIDTH = 800
+HEIGHT = 600
 
-#TODO: Move the Snake (Done)
+gamescreen = Screen()
+
+gamescreen.setup(WIDTH, HEIGHT)
+gamescreen.bgcolor("black")
+gamescreen.tracer(0)
+gamescreen.listen()
+
+#Design Gamescreen
+design = Designer(WIDTH, HEIGHT)
+
+#Importin snake
+
+snake = Snake()
+snakebody = snake.body
+
+#Initiating Food
+food = Food(snakebody, WIDTH, HEIGHT)
+
+# pen = gamescreen.pen
+
+# #TODO: Move the Snake (Done)
 
 game_status = True
 counter = 90
-score = 0
+
+# Create a scoreboard
+scoreboard = ScoreBoard()
+
+gamescreen.update()
+
 while game_status:
     head = snake.head
     body = snakebody[1:]
     coordinate = head.pos()
     snake.body_movement()
     snake.head_movement()
-#TODO: Control the Snake
+# Control the Snake
     key_pressed = False
 
     def up():
@@ -47,11 +66,13 @@ while game_status:
         key_pressed = False
 
     def on_key_pressed(key_name):
+        """Make sure key cannot be pressed repeatedly"""
         global key_pressed
         if not key_pressed:
             key_pressed = True
             controller(key_name)
-            screen.ontimer(reset_key_flag, 200)
+            gamescreen.ontimer(reset_key_flag, 100)
+
     def controller(key):
         if key == "w":
             snake.move_up()
@@ -62,17 +83,17 @@ while game_status:
         else:
             snake.move_right()
 
-    screen.onkey(down, "s")
-    screen.onkey(up, "Up")
-    screen.onkey(down, "Down")
-    screen.onkey(left, "a")
-    screen.onkey(left, "Left")
-    screen.onkey(up, "w")
-    screen.onkey(right, "d")
-    screen.onkey(right, "Right")
+    gamescreen.onkey(down, "s")
+    gamescreen.onkey(up, "Up")
+    gamescreen.onkey(down, "Down")
+    gamescreen.onkey(left, "a")
+    gamescreen.onkey(left, "Left")
+    gamescreen.onkey(up, "w")
+    gamescreen.onkey(right, "d")
+    gamescreen.onkey(right, "Right")
 
 
-# #TODO: Detect collision with the food
+    # Detect collision with the food
 
     head_pos = head.pos()
 
@@ -81,7 +102,8 @@ while game_status:
         counter = 90
 
     if food.isFoodEaten(head):
-        score += 1
+        scoreboard.increase_score()
+        scoreboard.update_score()
         snake.add_segment()
         food.relocate(snakebody)
         counter = 90
@@ -90,17 +112,14 @@ while game_status:
         food.visiblity(counter)
         counter -= 1
 
-# #TODO: Create a scoreboard
+    # Detect collision with the wall and tail
+    game_status = statusCheck(head_pos, snakebody, design)
 
-# #TODO: Detect collision with the wall
-# #TODO: Detect collision with the tail
-    game_status = statusCheck(head_pos, snakebody, screen)
-#     #write_score(pen, score, max_xy[1], game_status)
-    screen.write_score(score, game_status)
-
-# #TODO: Update Screen
-#     game_screen.update()
-    screen.screen_update()
+    # Update Screen
+    gamescreen.update()
     time.sleep(.1)
 
-screen.exit_on_click()
+
+scoreboard.update_highscore()
+scoreboard.game_over()
+gamescreen.exitonclick()
