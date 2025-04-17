@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from PIL import Image
 from turtle import Screen
-from scoreboard import Pen, Scoreboard
+from scoreboard import Pen
 
 scrip_dir = os.path.dirname(__file__)
 image_path = os.path.join(scrip_dir, "./assets/blank_states_img.gif")
@@ -21,23 +21,26 @@ gamescreen.bgpic(image_path)
 gamescreen.tracer(0)
 
 pen = Pen()
-score = Scoreboard()
 game_status = True
-
+guessed_states = []
+state_list = data.state.to_list()
 while game_status:
-    to_check = gamescreen.textinput("State", "Your Answer: ").strip().title()
+    to_check = gamescreen.textinput(f"{len(guessed_states)}/{len(data)} States Correct", "Your Guess: ").strip().title()
     to_write = data[data["state"] == to_check]
-    score.update_score()
-    if not to_write.empty:
-        score.increase_score()
-        score.update_score()
+    if to_check == "Exit":
+        break
+    if not to_write.empty and to_check not in guessed_states:
+        guessed_states.append(to_check)
         pen.data_write(to_write)
-    else:
-        game_status = False
-        score.update_high_score()
-        score.write_high_score()
 
     gamescreen.update()
 
+learn_filepath = os.path.join(scrip_dir,"./assets/states.learn.csv")
+state_to_learn = []
 
-gamescreen.exitonclick()
+for state in state_list:
+    if state not in guessed_states:
+        state_to_learn.append(state)
+
+learning_data = pd.DataFrame(state_to_learn)
+learning_data.to_csv(learn_filepath)
