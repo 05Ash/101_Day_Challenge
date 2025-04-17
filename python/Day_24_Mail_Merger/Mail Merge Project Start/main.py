@@ -8,8 +8,8 @@ file_path_names = os.path.join(script_dir, "./Input/Names/invited_names.txt")
 with open(file_path_names, "r") as file:
     names = file.read()
 for name in names.split("\n"):
-    file_path_write = os.path.join(script_dir, "./Output/ReadyToSend", name)
-    content = letter_template.replace("[name]", name)
+    file_path_write = os.path.join(script_dir, f"./Output/ReadyToSend/letter_to_{name}.txt")
+    content = letter_template.replace("[name]", name.strip())
     with open(file_path_write, "w") as file:
         file.write(content)
 
