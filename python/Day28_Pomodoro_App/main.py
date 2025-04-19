@@ -56,7 +56,7 @@ def countdown(counter_sec, break_time = False):
             check_write(check_count)
             break_countdown()
 
-        timer_fn = app_window.after(1, countdown, counter_sec-1, break_time)
+        timer_fn = app_window.after(10, countdown, counter_sec-1, break_time)
 
 def check_write(count):
     check_label.config(text = CHECK_MARK*count)
