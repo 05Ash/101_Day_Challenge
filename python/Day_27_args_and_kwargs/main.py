@@ -35,31 +35,31 @@ heading.grid(row=1, column=4)
 
 
 km_variable = StringVar()
-km = Entry(prog_window, background="aliceblue", width=8, textvariable=km_variable, font = FONT)
+km = Entry(prog_window, background="aliceblue", width=8, textvariable=km_variable, font = FONT, borderwidth=2,relief="sunken")
 km_variable.set("1")
 km.grid(row=3, column=2)
 km_entry = float(km_variable.get())
 
 km_unit = Label(prog_window, text="Kilometer", background="white", font=FONT, width=8)
-km_unit.config(pady=20, padx=20)
+km_unit.config(pady=-20, padx=20)
 km_unit.grid(row=4,column=2)
 
 equal_label = Label(prog_window, text = "=",background="white", font = ("Times New Roman", 24, "bold"), width = 2)
 equal_label.grid(row=3,column=4)
 
 mile_variable = StringVar()
-mile = Entry(prog_window, background="aliceblue", width=8, textvariable=mile_variable, font =FONT)
+mile = Entry(prog_window, background="aliceblue", width=8, textvariable=mile_variable, font =FONT, borderwidth=2, relief="sunken")
 mile_variable.set("0.621371")
 mile.grid(row=3,column=5)
 mile_entry = float(mile_variable.get())
 
 
 mile_unit = Label(prog_window, text="Mile", background="white",font=FONT, width=8)
-mile_unit.config(pady=20, padx=20)
+mile_unit.config(padx= 20, pady=-20)
 mile_unit.grid(row=4, column=5)
 
 
-enter_button = Button(prog_window, text="Convert", background="white", activebackground="gray", command=unit_converter)
+enter_button = Button(prog_window, text="Convert", background="white", activebackground="gray", command=unit_converter, font =FONT)
 enter_button.grid(row=6, column = 4)
 
 

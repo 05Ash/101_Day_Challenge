@@ -36,11 +36,7 @@ while game_status:
     gamescreen.update()
 
 learn_filepath = os.path.join(scrip_dir,"./assets/states.learn.csv")
-state_to_learn = []
+state_to_learn = [state for state in state_list if state not in guessed_states]
 
-for state in state_list:
-    if state not in guessed_states:
-        state_to_learn.append(state)
-
-learning_data = pd.DataFrame(state_to_learn)
+learning_data = pd.DataFrame(state_to_learn, columns = ["state"])
 learning_data.to_csv(learn_filepath)
