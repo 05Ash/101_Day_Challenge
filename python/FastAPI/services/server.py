@@ -1,14 +1,10 @@
-from services.configS import server_connect
-import psycopg2
-from time import sleep
+from services.configS import SQLALCHEMY_DATABASE_URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
-while True:
-    try:
-        connection = server_connect()
-        cursor = connection.cursor()
-        print("Connection Successful.")
-        break
-    except Exception as error:
-        print("Connection to database failed.")
-        print("Error: ",error)
-        sleep(2)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind = engine)
+
+Base = declarative_base()

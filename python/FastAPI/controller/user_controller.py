@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from fastapi import APIRouter, status, HTTPException, Response
+from fastapi import APIRouter, status, HTTPException, Response, Depends
 import services.user_services as services
-
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -11,28 +11,29 @@ class Post(BaseModel):
     published : bool = True
 
 @router.get("/")
-def get_posts():
-    return services.get_posts()
+def get_posts(db: Session = Depends(services.get_db)):
+    data = services.get_posts(db)
+    return data
 
-@router.post("/posts", status_code= status.HTTP_201_CREATED)
-def create_post(post:Post):
+@router.post("/post", status_code= status.HTTP_201_CREATED)
+def create_post(post:Post, db:Session = Depends(services.get_db)):
     try:
-        services.create_post(post)
+        return services.create_post(db, post)
     except:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="Something went wrong")
 
-@router.get("/posts/{id}", status_code=status.HTTP_200_OK)
-def get_post(id: int):
-    post = services.find_post(id)
+@router.get("/post/{id}", status_code=status.HTTP_200_OK)
+def get_post(id: int, db:Session = Depends(services.get_db)):
+    post = services.find_post(db, id)
     return {"data": post}
 
 @router.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: int):
-    services.delete_post(id)
-    return Response(status_code = status.HTTP_204_NO_CONTENT)
+def delete_post(id: int, db: Session = Depends(services.get_db)):
+    services.delete_post(db, id)
+    return {Response(status_code = status.HTTP_204_NO_CONTENT)}
 
 @router.put("/posts/{id}", status_code=status.HTTP_200_OK)
-def update_post(id: int, post:Post):
-    services.update(id, post.model_dump())
-    return  {"data":services.find_post(id)}
+def update_post(id: int, post:Post, db: Session = Depends(services.get_db)):
+    services.update(id, post, db)
+    return  {"data":services.find_post(db, id)}
