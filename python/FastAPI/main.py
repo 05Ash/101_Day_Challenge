@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 from h11 import Request
 from controller.user_controller import router as user_router
 
-
 # Create app instance
 app = FastAPI()
 

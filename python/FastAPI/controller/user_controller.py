@@ -1,20 +1,18 @@
-from typing import Optional
 from pydantic import BaseModel
 from fastapi import APIRouter, status, HTTPException, Response
 import services.user_services as services
-from data.user_data import my_posts as posts
+
 
 router = APIRouter()
 
 class Post(BaseModel):
     title : str
     content : str
-    publish : bool = True
-    rating : Optional[int] = None
+    published : bool = True
 
 @router.get("/")
 def get_posts():
-    return posts
+    return services.get_posts()
 
 @router.post("/posts", status_code= status.HTTP_201_CREATED)
 def create_post(post:Post):
@@ -36,5 +34,5 @@ def delete_post(id: int):
 
 @router.put("/posts/{id}", status_code=status.HTTP_200_OK)
 def update_post(id: int, post:Post):
-    index = services.update(id, post.model_dump())
-    return  {"data":posts[index]}
+    services.update(id, post.model_dump())
+    return  {"data":services.find_post(id)}
