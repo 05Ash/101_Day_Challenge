@@ -3,3 +3,5 @@ uvicorn
 sqlalchemy
 pydantic[email]
 pydantic
+passlib
+passlib[bcrypt]

@@ -1,6 +1,6 @@
-from settings.config import PostCreate, PostResponse, UserCreate
+from settings.config import PostCreate, PostResponse
 from fastapi import APIRouter, status, HTTPException, Response, Depends
-import services.user_services as services
+from services import post_services as services
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -37,7 +37,3 @@ def delete_post(id: int, db: Session = Depends(services.get_db)):
 def update_post(id: int, post:PostCreate, db: Session = Depends(services.get_db)):
     services.update(id, post, db)
     return  services.find_post(db, id)
-
-@router.post("/user", status_code = status.HTTP_201_CREATED)
-def create_user(user: UserCreate, db: Session = Depends(services.get_db)):
-    return services.create_user(user, db)
