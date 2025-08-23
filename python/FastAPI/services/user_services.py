@@ -28,7 +28,7 @@ def create_post(post):
                    (post.title, post.content, post.published)
     )
     connection.commit()
-#as
+
 def delete_post(id):
     cursor.execute("DELETE FROM posts WHERE post_id=%s",
                    (id,))
