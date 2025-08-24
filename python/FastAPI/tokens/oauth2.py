@@ -2,10 +2,9 @@ from jose import JWTError, jwt
 from settings import keys, config
 from datetime import UTC, datetime, timedelta
 from fastapi import Depends, status, HTTPException
-from fastapi.security import OAuth2PasswordBearer, HTTPBearer
+from fastapi.security import OAuth2PasswordBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
-http_bearer_scheme = HTTPBearer()
 
 
 def create_access_token(data: dict):
