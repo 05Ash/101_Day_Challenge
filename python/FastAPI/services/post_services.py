@@ -1,16 +1,9 @@
 from fastapi import status, HTTPException
 from settings import models
-from services.server import SessionLocal, engine
+from services.server import engine
 from sqlalchemy.orm import Session
 
 models.Base.metadata.create_all(bind=engine)
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # #Finds a post based on id
 def get_posts(db: Session):
