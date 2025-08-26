@@ -1,6 +1,5 @@
 from pydoc import text
-from pydantic import BaseModel
-from sqlalchemy import TIMESTAMP, Column, Integer, String, Text, Boolean
+from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, Text, Boolean
 from services.server import Base
 from sqlalchemy.sql.expression import text
 
@@ -14,6 +13,7 @@ class Post(Base):
     created_at = Column(TIMESTAMP(timezone = True),
                         nullable = False,
                         server_default = text('Now()'))
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="cascade"), nullable = False)
 
 class Users(Base):
     __tablename__ = "users"
