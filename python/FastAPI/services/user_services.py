@@ -11,7 +11,7 @@ def create_user(user, db:Session):
     #hash the password
     user.password = utils.hash(user.password)
     try:
-        user = models.Users(**user.model_dump())
+        user = models.User(**user.model_dump())
         db.add(user)
         db.commit()
         db.refresh(user)
@@ -29,7 +29,7 @@ def create_user(user, db:Session):
         )
 
 def find_user(id, db: Session):
-    user = db.query(models.Users).filter(models.Users.id == id).first()
+    user = db.query(models.User).filter(models.User.id == id).first()
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

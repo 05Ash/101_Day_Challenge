@@ -10,7 +10,7 @@ models.Base.metadata.create_all(bind = engine)
 
 def user_login(user_credentials, db: Session):
     print(user_credentials)
-    user = db.query(models.Users).filter(models.Users.email == user_credentials.username).first()
+    user = db.query(models.User).filter(models.User.email == user_credentials.username).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail = "Invalid Credentials")

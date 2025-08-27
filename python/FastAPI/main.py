@@ -3,6 +3,7 @@ from fastapi import FastAPI, status, HTTPException
 from fastapi.responses import JSONResponse
 from h11 import Request
 from routers import posts, users, auth
+from settings.config import settings as set
 
 # Create app instance
 app = FastAPI()

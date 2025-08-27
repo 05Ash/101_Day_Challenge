@@ -1,42 +1,18 @@
-from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic_settings import BaseSettings
 
 
-class PostBase(BaseModel):
-    title : str
-    content : str
-    published : bool = True
-
-class PostCreate(PostBase):
-    pass
-
-class PostResponse(PostBase):
-    id: int
-    created_at: datetime
-    user_id: int
+class Settings(BaseSettings):
+    database_username: str
+    database_password: str
+    database_address: str
+    database_port: str
+    database: str
+    authorization_key: str
+    algorithm: str
+    access_token_time: int
 
     class Config:
-        orm_mode = True
+        env_file = "settings/.env"
 
-class UserCreate(BaseModel):
-    email: EmailStr
-    password: str
 
-class UserResponse(BaseModel):
-    id: int
-    email: EmailStr
-    created_at: datetime
-    class Config:
-        orm_mode = True
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-class TokenData(BaseModel):
-    id: Optional[int] = None
+settings = Settings()

@@ -1,4 +1,4 @@
-from settings.config import UserCreate, UserResponse
+from settings.schemas import UserCreate, UserResponse
 from fastapi import APIRouter, status, Depends
 from services.server import get_db
 from services import user_services as services

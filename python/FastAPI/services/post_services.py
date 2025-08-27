@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 models.Base.metadata.create_all(bind=engine)
 
 # #Finds a post based on id
-def get_posts(db: Session, id):
-    posts = db.query(models.Post).all()
+def get_posts(db: Session, limit, skip, search_parameter):
+    posts = db.query(models.Post).filter(models.Post.title.contains(search_parameter)).limit(limit).offset(skip).all()
     return posts
 
 def find_post(db: Session, post_id):
@@ -39,7 +39,7 @@ def delete_post(db:Session, id, user_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail=f"Post with id: {id} not found.")
     is_owner(post, user_id)
-    post.delete(synchronize_session = False)
+    post_query.delete(synchronize_session = False)
     db.commit()
 
 def update_post(id, post, db: Session, user_id):

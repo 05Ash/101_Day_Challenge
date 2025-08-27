@@ -1,6 +1,7 @@
 from pydoc import text
 from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, Text, Boolean
 from services.server import Base
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 
 class Post(Base):
@@ -14,8 +15,9 @@ class Post(Base):
                         nullable = False,
                         server_default = text('Now()'))
     user_id = Column(Integer, ForeignKey("users.id", ondelete="cascade"), nullable = False)
+    user = relationship("User")
 
-class Users(Base):
+class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, nullable = False, primary_key = True)

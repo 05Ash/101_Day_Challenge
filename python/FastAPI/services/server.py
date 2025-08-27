@@ -1,7 +1,9 @@
-from settings.keys import SQLALCHEMY_DATABASE_URL
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from settings.config import settings as set
+
+SQLALCHEMY_DATABASE_URL = f'postgresql://{set.database_username}:{set.database_password}@{set.database_address}:{set.database_port}/{set.database}'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
