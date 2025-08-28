@@ -2,7 +2,7 @@
 from fastapi import FastAPI, status, HTTPException
 from fastapi.responses import JSONResponse
 from h11 import Request
-from routers import posts, users, auth
+from routers import posts, users, auth, votes
 from settings.config import settings as set
 
 # Create app instance
@@ -21,3 +21,5 @@ app.include_router(posts.router)
 app.include_router(users.router)
 
 app.include_router(auth.router)
+
+app.include_router(votes.router)

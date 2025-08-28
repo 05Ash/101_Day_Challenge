@@ -5,9 +5,6 @@ from utilities import utils
 from fastapi import status, HTTPException
 from tokens import oauth2
 
-
-models.Base.metadata.create_all(bind = engine)
-
 def user_login(user_credentials, db: Session):
     print(user_credentials)
     user = db.query(models.User).filter(models.User.email == user_credentials.username).first()

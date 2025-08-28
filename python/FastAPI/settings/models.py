@@ -1,8 +1,13 @@
 from pydoc import text
 from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, Text, Boolean
-from services.server import Base
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
+from services.server import engine
+
+Base = declarative_base()
+
+
 
 class Post(Base):
     __tablename__ = "posts"
@@ -14,7 +19,7 @@ class Post(Base):
     created_at = Column(TIMESTAMP(timezone = True),
                         nullable = False,
                         server_default = text('Now()'))
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="cascade"), nullable = False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable = False)
     user = relationship("User")
 
 class User(Base):
@@ -26,3 +31,15 @@ class User(Base):
     created_at = Column(TIMESTAMP(timezone = True),
                         nullable = False,
                         server_default = text('NOW()'))
+
+class Vote(Base):
+    __tablename__ = "votes"
+
+    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"),primary_key=True)
+    post = relationship("Post")
+    user = relationship("User")
+
+
+
+Base.metadata.create_all(bind=engine)

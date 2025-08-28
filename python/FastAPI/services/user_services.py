@@ -1,11 +1,8 @@
 from fastapi import status, HTTPException
 from settings import models
-from services.server import engine
 from utilities import utils
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-
-models.Base.metadata.create_all(bind=engine)
 
 def create_user(user, db:Session):
     #hash the password

@@ -3,8 +3,6 @@ from settings import models
 from services.server import engine
 from sqlalchemy.orm import Session
 
-models.Base.metadata.create_all(bind=engine)
-
 # #Finds a post based on id
 def get_posts(db: Session, limit, skip, search_parameter):
     posts = db.query(models.Post).filter(models.Post.title.contains(search_parameter)).limit(limit).offset(skip).all()
