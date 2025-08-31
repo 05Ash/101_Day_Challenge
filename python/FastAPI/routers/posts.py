@@ -1,4 +1,4 @@
-from settings.schemas import PostCreate, PostResponse
+from settings.schemas import PostCreate, PostResponse, PostOut
 from fastapi import APIRouter, status, HTTPException, Response, Depends
 from services import post_services as services
 from services.server import get_db
@@ -16,12 +16,12 @@ router = APIRouter(
 def root():
     return {"message": "Welcome"}
 
-@router.get("s/", status_code=status.HTTP_200_OK, response_model = List[PostResponse])
+@router.get("s/", status_code=status.HTTP_200_OK, response_model=List[PostOut])
 def get_posts(limit: int = 10, skip:int = 0,
               search: Optional[str] = "",
-              db: Session = Depends(get_db),
-              current_user: models.User = Depends(oauth2.get_current_user)):
-    print(current_user.email)
+              db: Session = Depends(get_db)):
+            #   ,current_user: models.User = Depends(oauth2.get_current_user)):
+    # print(current_user.email)
     data = services.get_posts(db, limit, skip, search)
     return data
 

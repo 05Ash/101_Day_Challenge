@@ -2,11 +2,22 @@ from fastapi import status, HTTPException
 from settings import models
 from services.server import engine
 from sqlalchemy.orm import Session
+from sqlalchemy import func
+from settings.schemas import PostResponse
 
 # #Finds a post based on id
 def get_posts(db: Session, limit, skip, search_parameter):
     posts = db.query(models.Post).filter(models.Post.title.contains(search_parameter)).limit(limit).offset(skip).all()
-    return posts
+    results = (
+        db.query(models.Post, func.count(models.Vote.post_id).label("votes"))
+        .join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True)
+        .group_by(models.Post.id)
+        .filter(models.Post.title.contains(search_parameter))
+        .offset(skip).limit(limit)
+        .all()
+    )
+    return results
+
 
 def find_post(db: Session, post_id):
     post = db.query(models.Post).filter(models.Post.id == post_id).first()

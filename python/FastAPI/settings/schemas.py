@@ -23,7 +23,12 @@ class PostResponse(PostBase):
     created_at: datetime
     user_id: int
     user: UserResponse
+    class Config:
+        orm_mode = True
 
+class PostOut(BaseModel):
+    Post: PostResponse
+    votes: int
     class Config:
         orm_mode = True
 
