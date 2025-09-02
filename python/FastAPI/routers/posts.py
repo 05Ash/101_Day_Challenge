@@ -33,7 +33,7 @@ def create_post(post:PostCreate, db:Session = Depends(get_db), current_user:mode
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="Something went wrong")
 
-@router.get("/{id}", status_code=status.HTTP_200_OK, response_model= PostResponse)
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model= PostOut)
 def get_post(id: int, db:Session = Depends(get_db)):
     post = services.find_post(db, id)
     return post

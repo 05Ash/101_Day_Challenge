@@ -7,7 +7,7 @@ from settings.schemas import PostResponse
 
 # #Finds a post based on id
 def get_posts(db: Session, limit, skip, search_parameter):
-    posts = db.query(models.Post).filter(models.Post.title.contains(search_parameter)).limit(limit).offset(skip).all()
+    # posts = db.query(models.Post).filter(models.Post.title.contains(search_parameter)).limit(limit).offset(skip).all()
     results = (
         db.query(models.Post, func.count(models.Vote.post_id).label("votes"))
         .join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True)
@@ -20,7 +20,12 @@ def get_posts(db: Session, limit, skip, search_parameter):
 
 
 def find_post(db: Session, post_id):
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    post = (db.query(
+        models.Post, func.count(models.Vote.post_id).label("votes"))
+        .join(models.Vote, models.Vote.post_id==models.Post.id, isouter=True)
+        .filter(models.Post.id == post_id)
+        .group_by(models.Post.id)
+        .first())
     if post is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail=f"Post with id: {post_id} not found.")

@@ -7,3 +7,4 @@ passlib
 passlib[bcrypt]
 python-jose[cryptography]
 pydantic-settings
+alembic
