@@ -19,7 +19,7 @@ class Post(Base):
     created_at = Column(TIMESTAMP(timezone = True),
                         nullable = False,
                         server_default = text('Now()'))
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable = False)
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable = False)
     user = relationship("User")
 
 class User(Base):
@@ -31,6 +31,7 @@ class User(Base):
     created_at = Column(TIMESTAMP(timezone = True),
                         nullable = False,
                         server_default = text('NOW()'))
+    phone_number = Column(String)
 
 class Vote(Base):
     __tablename__ = "votes"
@@ -40,6 +41,4 @@ class Vote(Base):
     post = relationship("Post")
     user = relationship("User")
 
-
-
-Base.metadata.create_all(bind=engine)
+#models.Base.metadata.create_all(bind = engine)

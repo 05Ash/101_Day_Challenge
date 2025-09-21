@@ -12,10 +12,6 @@ router = APIRouter(
                     tags=['Posts']
                     )
 
-@router.get("/home", status_code=status.HTTP_200_OK)
-def root():
-    return {"message": "Welcome"}
-
 @router.get("s/", status_code=status.HTTP_200_OK, response_model=List[PostOut])
 def get_posts(limit: int = 10, skip:int = 0,
               search: Optional[str] = "",
