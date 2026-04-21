@@ -5,6 +5,7 @@ from h11 import Request
 from routers import posts, users, auth, votes
 from settings.config import settings as set
 from fastapi.middleware.cors import CORSMiddleware
+
 # Create app instance
 app = FastAPI()
 
