@@ -1,7 +1,9 @@
 from tkinter import *
 import os
+from tkinter import messagebox
 from wonderwords import RandomWord
 import secrets
+import pyperclip
 
 FONT = ("Calibri", 15, "normal")
 
@@ -27,14 +29,22 @@ def generate_password():
     if len(password) > 32:
         generate_password()
     pass_var.set(password)
+    pyperclip.copy(password)
 
 # Add Password
 def add_password():
-    with open(password_path, "a") as file:
-        to_write = ", ".join([web_var.get(), mail_var.get(), pass_var.get()])
-        file.write(to_write+"\n")
-    website_entry.delete(0, END)
-    password_entry.delete(0, END)
+    website = web_var.get()
+    email = mail_var.get()
+    password = pass_var.get()
+    if not website or not password:
+        messagebox.showwarning(title="Invalid Input", message="Either Email or Password is empty.\nPlease enter valid input.")
+    else:
+        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered.\nEmail: {email}\nPassword: {password}\nDo you want to save?")
+        if is_ok:
+            with open(password_path, "a") as file:
+                file.write(f"{website}, {email}, {password}\n")
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)
 
 
 
